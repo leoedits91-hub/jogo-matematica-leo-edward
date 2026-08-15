@@ -1,43 +1,61 @@
 import random
 import streamlit as st
 
+# Configuração inicial da página
 st.set_page_config(
-    page_title="Quiz de Estudos - 3º Ano", page_icon="📚", layout="centered"
+    page_title="Desafio de Estudos - 3º Ano",
+    page_icon="✏️",
+    layout="centered",
 )
 
-# Banco de dados expandido com variadas perguntas e explicações detalhadas
+# Estilização visual para deixar o app mais bonito e moderno
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-color: #f8f9fa;
+    }
+    div.stButton > button:first-child {
+        border-radius: 8px;
+        font-weight: bold;
+    }
+    </style>
+""",
+    unsafe_allow_html=True,
+)
+
+# Banco de perguntas com linguagem natural
 BANCO_PERGUNTAS = {
-    "Educação Física (Danças)": [
+    "🏃‍♂️ Educação Física - Danças e Ritmos": [
         {
             "pergunta": (
-                "Qual destas danças é considerada uma dança folclórica e de"
-                " roda muito tradicional no Brasil?"
+                "Qual destas danças é de roda, super tradicional no Brasil e"
+                " reúne todo mundo de mãos dadas?"
             ),
             "opcoes": ["Ciranda", "Hip-hop", "Ballet clássico", "Tango"],
             "correta": "Ciranda",
             "explicacao": (
-                "A Ciranda é uma dança comunitária de roda típica do Brasil"
-                " (muito forte em Pernambuco), onde todos se dão as mãos,"
-                " simbolizando união e integração social."
+                "A Ciranda é uma dança comunitária onde os participantes dão as"
+                " mãos em roda. Ela representa união e é super forte na cultura"
+                " de Pernambuco."
             ),
         },
         {
             "pergunta": (
-                "Qual elemento da dança está relacionado ao uso do ritmo, da"
-                " velocidade e das pausas nos movimentos?"
+                "Quando marcamos o ritmo, a velocidade rápida ou lenta e as"
+                " pausas dos passos, estamos usando qual elemento da dança?"
             ),
             "opcoes": ["Tempo", "Espaço", "Peso do corpo", "Figurino"],
             "correta": "Tempo",
             "explicacao": (
-                "O elemento 'Tempo' diz respeito ao ritmo da música, à"
-                " velocidade da execução (rápido ou lento) e às pausas feitas"
-                " durante a dança."
+                "O elemento 'Tempo' controla o ritmo do movimento, as aceleradas"
+                " e aquelas paradinhas estratégicas durante a música."
             ),
         },
         {
             "pergunta": (
-                "A dança Frevo, conhecida pelo uso de pequenos guarda-chuvas"
-                " coloridos, é originária de qual estado brasileiro?"
+                "Famoso pelos passos rápidos e pelos guarda-chuvas coloridos,"
+                " o Frevo surgiu em qual estado?"
             ),
             "opcoes": [
                 "Pernambuco",
@@ -47,373 +65,344 @@ BANCO_PERGUNTAS = {
             ],
             "correta": "Pernambuco",
             "explicacao": (
-                "O Frevo nasceu no estado de Pernambuco. Ele combina ritmos"
-                " acelerados, passos de capoeira e o famoso guarda-chuva"
-                " colorido para dar equilíbrio ao passista."
+                "O Frevo nasceu nas ruas de Pernambuco! Ele mistura acrobacias,"
+                " capoeira e o som contagiante dos metais."
             ),
         },
         {
             "pergunta": (
-                "O que caracteriza as Danças Urbanas (Street Dance / Hip-hop)?"
+                "O que melhor define as Danças Urbanas (como o Hip-hop e Street"
+                " Dance)?"
             ),
             "opcoes": [
                 (
-                    "Surgiram em espaços urbanos com movimentos fortes e"
-                    " improvisação"
+                    "Movimentos fortes, ritmo marcante e criação nas ruas e"
+                    " bairros"
                 ),
-                "São dançadas apenas em palcos com sapatilhas de ponta",
-                "Uso exclusivo de roupas de época e ritmo de valsa lenta",
-                "Falta total de ritmo ou acompanhamento musical",
+                "Dança de salão em pares usando roupas da época do império",
+                "Passos lentos apresentados apenas com sapatilhas de ponta",
+                "Apresentações silenciosas e sem nenhum acompanhamento de som",
             ],
             "correta": (
-                "Surgiram em espaços urbanos com movimentos fortes e"
-                " improvisação"
+                "Movimentos fortes, ritmo marcante e criação nas ruas e"
+                " bairros"
             ),
             "explicacao": (
-                "As danças urbanas surgiram nos centros das grandes cidades"
-                " como forma de expressão cultural e artística dos jovens,"
-                " usando improvisação e movimentos marcados."
+                "Elas nasceram nos grandes centros urbanos como forma de"
+                " expressão dos jovens, misturando criatividade e muita"
+                " atitude."
             ),
         },
         {
             "pergunta": (
-                "Na dança, quando nos movimentamos para a frente, para trás, em"
-                " círculos ou em linhas retas, estamos explorando qual"
-                " elemento?"
+                "Mudar de direção (ir pra frente, pra trás, fazer curvas ou"
+                " abaixar) explora qual área da dança?"
             ),
-            "opcoes": ["Espaço", "Alimentação", "Somente a música", "Figurino"],
+            "opcoes": ["Espaço", "Alimentação", "Apenas a música", "Figurino"],
             "correta": "Espaço",
             "explicacao": (
-                "O Espaço refere-se às direções (frente, trás, lados), níveis"
-                " (alto, médio, baixo) e trajetórias que o corpo percorre pelo"
-                " ambiente enquanto dança."
+                "O Espaço é o lugar onde o corpo se desloca. Ele envolve"
+                " trajetórias, alturas (alto, médio, baixo) e direções."
             ),
         },
         {
             "pergunta": (
-                "A Quadrilha é uma dança típica de qual festividade tradicional"
-                " brasileira?"
+                "Em qual época do ano a gente mais dança a Quadrilha no"
+                " Brasil?"
             ),
             "opcoes": [
-                "Festa Junina",
+                "Festas Juninas",
                 "Carnaval de Rua",
-                "Ano Novo (Réveillon)",
-                "Dia das Crianças",
+                "Ano Novo",
+                "Férias de Verão",
             ],
-            "correta": "Festa Junina",
+            "correta": "Festas Juninas",
             "explicacao": (
-                "A Quadrilha é a dança símbolo das Festas Juninas no Brasil,"
-                " com origem em danças de corte europeias que foram adaptadas"
-                " com temas caipiras e da roça."
+                "A Quadrilha é a marca registrada de junho e julho! Ela recria"
+                " comemorações caipiras com muita música e passos animados em"
+                " pares."
             ),
         },
         {
             "pergunta": (
-                "Qual é o principal objetivo da dança na Educação Física"
-                " escolar?"
-            ),
-            "opcoes": [
-                (
-                    "Desenvolver a coordenação motora, expressão corporal e"
-                    " trabalho em equipe"
-                ),
-                "Formar apenas dançarinos profissionais para a televisão",
-                "Fazer os alunos decorarem passos sem se divertirem",
-                "Substituir todos os outros esportes para sempre",
-            ],
-            "correta": (
-                "Desenvolver a coordenação motora, expressão corporal e"
-                " trabalho em equipe"
-            ),
-            "explicacao": (
-                "Na escola, a dança ajuda no ritmo, na consciência do próprio"
-                " corpo, na criatividade e no respeito às diferenças socioculturais."
-            ),
-        },
-        {
-            "pergunta": (
-                "O Samba de Roda é uma manifestação cultural declarada"
-                " Patrimônio Imaterial da Humanidade. Em qual região do Brasil"
-                " ele é mais tradicional?"
+                "O Samba de Roda é um patrimônio cultural do Brasil. Em qual"
+                " região ele é mais tradicional?"
             ),
             "opcoes": [
                 "Recôncavo Baiano (Bahia)",
                 "Pampa Gaúcho",
                 "Pantanal",
-                "Floresta Amazônica",
+                "Serra Gaúcha",
             ],
             "correta": "Recôncavo Baiano (Bahia)",
             "explicacao": (
-                "O Samba de Roda nasceu no Recôncavo Baiano, fruto da rica"
-                " cultura dos africanos escravizados, misturando dança, palma e"
-                " instrumentos de percussão."
+                "Ele nasceu na Bahia, fruto da cultura afro-brasileira, unindo"
+                " batucada, palmas e muita dança no meio da roda."
             ),
         },
     ],
-    "Geografia (3º Ano - 3º Bimestre)": [
+    "🌍 Geografia - Campo, Cidade e Paisagens": [
         {
             "pergunta": (
-                "Qual é a principal diferença entre a área urbana (cidade) e a"
-                " área rural (campo)?"
+                "Qual é a diferença principal entre morar na cidade (área"
+                " urbana) e no campo (área rural)?"
             ),
             "opcoes": [
                 (
-                    "A área urbana possui mais construções e serviços; a rural"
-                    " foca na agricultura e natureza"
+                    "A cidade tem mais prédios, lojas e serviços; o campo é"
+                    " focado na agricultura e natureza"
                 ),
-                "A área rural tem mais prédios e avenidas do que a urbana",
-                (
-                    "A área urbana produz alimentos agrícolas para todo o país"
-                    " sozinha"
-                ),
-                "Não existe diferença entre o campo e a cidade",
+                "O campo tem mais avenidas movimentadas e viadutos",
+                "A cidade é onde ficam todas as plantações de grãos do país",
+                "Não há diferença nenhuma, os dois ambientes são iguais",
             ],
             "correta": (
-                "A área urbana possui mais construções e serviços; a rural foca"
-                " na agricultura e natureza"
+                "A cidade tem mais prédios, lojas e serviços; o campo é"
+                " focado na agricultura e natureza"
             ),
             "explicacao": (
-                "O espaço urbano concentra comércios, indústrias e serviços"
-                " densos. O espaço rural foca em atividades do setor primário,"
-                " como agricultura, pecuária e preservação da natureza."
+                "A área urbana concentra casas, lojas e fábricas juntas. Já a"
+                " área rural tem grandes espaços verdes, sítios e fazendas."
             ),
         },
         {
             "pergunta": (
-                "Como o campo e a cidade se ajudam no dia a dia"
-                " (interdependência)?"
+                "De que forma o campo e a cidade trabalham juntos no dia a dia?"
             ),
             "opcoes": [
                 (
-                    "O campo envia alimentos/matérias-primas e a cidade fornece"
-                    " produtos industrializados e serviços"
+                    "O campo produz os alimentos e a cidade fabrica as"
+                    " máquinas e roupas"
                 ),
-                "A cidade envia plantas para o campo produzir máquinas pesadas",
-                "O campo não precisa de nenhum produto fabricado na cidade",
-                (
-                    "A cidade produz todas as suas frutas e vegetais dentro"
-                    " dos apartamentos"
-                ),
+                "O campo só envia lixo e a cidade devolve plantas",
+                "A cidade produz todas as frutas dentro dos apartamentos",
+                "O campo não depende de nada que venha da cidade",
             ],
             "correta": (
-                "O campo envia alimentos/matérias-primas e a cidade fornece"
-                " produtos industrializados e serviços"
+                "O campo produz os alimentos e a cidade fabrica as"
+                " máquinas e roupas"
             ),
             "explicacao": (
-                "Há uma relação de troca: o campo fornece matérias-primas e"
-                " alimentos essenciais para a cidade, enquanto a cidade produz"
-                " tecnologias, adubos, máquinas e serviços utilizados no"
-                " campo."
+                "É uma troca constante! O campo manda comida e matéria-prima,"
+                " enquanto a cidade fornece ferramentas, remédios e"
+                " tecnologias."
             ),
         },
         {
             "pergunta": (
-                "Qual das opções descreve uma transformação da paisagem causada"
-                " pela ação humana (cultural)?"
+                "Qual destas opções mostra uma transformação da paisagem feita"
+                " pelas pessoas?"
             ),
             "opcoes": [
-                "Construção de uma ponte sobre um rio",
-                "Erupção de um vulcão natural",
-                "Crescimento natural de uma floresta intocada",
-                "Desgastamento das rochas pela força da chuva",
+                "Construção de uma ponte ou estrada",
+                "Nascimento natural de um rio",
+                "Um vulcão em erupção",
+                "Chuva caindo na floresta",
             ],
-            "correta": "Construção de uma ponte sobre um rio",
+            "correta": "Construção de uma ponte ou estrada",
             "explicacao": (
-                "Paisagens culturais ou modificadas são aquelas alteradas pela"
-                " intervenção do ser humano (como estradas, pontes e prédios),"
-                " ao contrário das paisagens puramente naturais."
+                "Quando o ser humano altera o espaço construindo casas, pontes ou"
+                " ruas, chamamos de paisagem modificada ou cultural."
             ),
         },
         {
-            "pergunta": "O que é matéria-prima?",
+            "pergunta": (
+                "O que significa a palavra 'Matéria-prima' nos nossos"
+                " estudos?"
+            ),
             "opcoes": [
                 (
-                    "O material bruto retirado da natureza usado para fabricar"
-                    " produtos"
+                    "O recurso vindo da natureza usado para fabricar um"
+                    " produto"
                 ),
-                "O produto final vendido na prateleira do supermercado",
-                "O dinheiro usado para comprar máquinas industriais",
-                "O lixo descartado pelas grandes fábricas",
+                "O salgadinho embalado que compramos no mercado",
+                "A caixa de papelão usada na mudança",
+                "O valor em dinheiro cobrado na loja",
             ],
             "correta": (
-                "O material bruto retirado da natureza usado para fabricar"
-                " produtos"
+                "O recurso vindo da natureza usado para fabricar um"
+                " produto"
             ),
             "explicacao": (
-                "Matéria-prima é o elemento natural bruto (como o leite, o"
-                " algodão ou a madeira) que é transformado pelas indústrias em"
-                " produtos finais (como queijo, roupas ou móveis)."
+                "É o elemento bruto natural (como o leite, o algodão ou o"
+                " tomate) que depois é transformado na fábrica em queijo, roupa"
+                " ou molho."
             ),
         },
         {
             "pergunta": (
-                "Qual atividade econômica do campo é responsável pela criação"
-                " de animais, como bois, vacas e galinhas?"
+                "Como se chama a atividade do campo responsável por criar bois,"
+                " vacas, galinhas e porcos?"
             ),
-            "opcoes": ["Peculidade / Pecuária", "Agricultura", "Extrativismo mineral", "Comércio de rua"],
-            "correta": "Peculidade / Pecuária",
+            "opcoes": [
+                "Pecuária",
+                "Agricultura",
+                "Pesca de mar",
+                "Comércio de rua",
+            ],
+            "correta": "Pecuária",
             "explicacao": (
-                "A Pecuária é a atividade rural voltada à criação e manejo de"
-                " animais para a produção de carne, leite, ovos, couro e outros"
-                " derivados."
+                "A Pecuária cuida da criação dos animais para a produção de"
+                " alimentos como leite, ovos, carnes e também de materiais como"
+                " o couro."
             ),
         },
         {
             "pergunta": (
-                "Como chamamos o extrativismo em que o ser humano apenas coleta"
-                " frutos, castanhas ou madeira diretamente da natureza sem ter"
-                " plantado?"
+                "Coletar açaí, castanhas ou madeira direto da floresta sem ter"
+                " plantado faz parte de qual atividade?"
             ),
             "opcoes": [
                 "Extrativismo Vegetal",
-                "Agricultura Comercial",
+                "Agricultura de Trator",
                 "Pecuária Intensiva",
-                "Indústria Automotiva",
+                "Construção Civil",
             ],
             "correta": "Extrativismo Vegetal",
             "explicacao": (
-                "O extrativismo vegetal consiste em coletar produtos que a"
-                " própria natureza oferece espontaneamente, como açaí,"
-                " borracha das seringueiras e castanhas."
+                "O extrativismo vegetal acontece quando retiramos produtos que a"
+                " própria natureza já produziu sozinha na floresta."
             ),
         },
         {
             "pergunta": (
-                "Qual é o impacto ambiental negativo provocado pelo descarte"
-                " incorreto de lixo nas cidades?"
+                "O que acontece quando o lixo das cidades é jogado na rua de"
+                " forma errada?"
             ),
             "opcoes": [
-                (
-                    "Poluição do solo e entupimento de bueiros, causando"
-                    " enchentes"
-                ),
-                "Melhoria na qualidade da água dos rios",
-                "Aumento das áreas de floresta nativa",
-                "Redução do trânsito nos centros urbanos",
+                "Entope bueiros e gera enchentes nas ruas",
+                "Limpa os rios de forma automática",
+                "Ajuda as árvores a crescerem mais rápido",
+                "Faz o trânsito fluir com mais facilidade",
             ],
-            "correta": (
-                "Poluição do solo e entupimento de bueiros, causando"
-                " enchentes"
-            ),
+            "correta": "Entope bueiros e gera enchentes nas ruas",
             "explicacao": (
-                "O lixo descartado incorretamente entope as galerias de água e"
-                " bueiros, fazendo com que as chuvas fortes alaguem as ruas e"
-                " contaminem o meio ambiente."
+                "A água da chuva não consegue escorrer pelos bueiros entupidos"
+                " de lixo, provocando alagamentos e sujeira pela cidade."
             ),
         },
     ],
 }
 
-TOTAL_PERGUNTAS_POR_JOGO = 5
+TOTAL_PERGUNTAS = 5
 
-# Estado da sessão
+# Controle do jogo
 if "pontos" not in st.session_state:
     st.session_state.pontos = 0
-if "pergunta_atual_idx" not in st.session_state:
-    st.session_state.pergunta_atual_idx = 0
-if "perguntas_sorteadas" not in st.session_state:
-    st.session_state.perguntas_sorteadas = []
-if "tema_escolhido" not in st.session_state:
-    st.session_state.tema_escolhido = None
+if "pergunta_atual" not in st.session_state:
+    st.session_state.pergunta_atual = 0
+if "lista_perguntas" not in st.session_state:
+    st.session_state.lista_perguntas = []
+if "tema" not in st.session_state:
+    st.session_state.tema = None
 if "respondido" not in st.session_state:
     st.session_state.respondido = False
-if "resposta_correta_flag" not in st.session_state:
-    st.session_state.resposta_correta_flag = False
+if "acertou" not in st.session_state:
+    st.session_state.acertou = False
 
 
-def reiniciar_jogo():
+def resetar():
     st.session_state.pontos = 0
-    st.session_state.pergunta_atual_idx = 0
-    st.session_state.perguntas_sorteadas = []
-    st.session_state.tema_escolhido = None
+    st.session_state.pergunta_atual = 0
+    st.session_state.lista_perguntas = []
+    st.session_state.tema = None
     st.session_state.respondido = False
-    st.session_state.resposta_correta_flag = False
+    st.session_state.acertou = False
 
 
-st.title("🎯 Quiz Interativo de Estudos - 3º Ano")
+# Título principal
+st.title("📝 Cantinho dos Estudos")
+st.write("Escolha a matéria, teste seus conhecimentos e aprenda com os erros!")
 
-# Tela 1: Escolha de Tema
-if st.session_state.tema_escolhido is None:
-    st.write("Escolha a matéria que deseja praticar hoje:")
-    tema = st.radio("Selecione o tema:", list(BANCO_PERGUNTAS.keys()))
-    if st.button("Iniciar Quiz", type="primary"):
-        st.session_state.tema_escolhido = tema
-        
-        # Copia e embaralha as perguntas do tema escolhido
-        lista_perguntas = [dict(p) for p in BANCO_PERGUNTAS[tema]]
-        random.shuffle(lista_perguntas)
-        
+st.divider()
+
+# Tela 1: Escolha da Matéria
+if st.session_state.tema is None:
+    st.subheader("O que vamos praticar hoje?")
+    opcao = st.radio("Selecione a disciplina:", list(BANCO_PERGUNTAS.keys()))
+
+    st.write("")
+    if st.button("Começar Exercícios 🚀", type="primary"):
+        st.session_state.tema = opcao
+
+        # Prepara e embaralha as perguntas
+        perguntas = [dict(p) for p in BANCO_PERGUNTAS[opcao]]
+        random.shuffle(perguntas)
+
         # Embaralha as alternativas de cada pergunta
-        for p in lista_perguntas:
+        for p in perguntas:
             random.shuffle(p["opcoes"])
-            
-        st.session_state.perguntas_sorteadas = lista_perguntas[:TOTAL_PERGUNTAS_POR_JOGO]
+
+        st.session_state.lista_perguntas = perguntas[:TOTAL_PERGUNTAS]
         st.rerun()
 
-# Tela 2: Fim do Quiz
-elif (
-    st.session_state.pergunta_atual_idx >= len(st.session_state.perguntas_sorteadas)
-):
+# Tela 2: Finalização
+elif st.session_state.pergunta_atual >= len(st.session_state.lista_perguntas):
     st.balloons()
-    st.header("🏆 Quiz Concluído!")
-    total = len(st.session_state.perguntas_sorteadas)
+    st.subheader("🎉 Mandou bem!")
+
+    total = len(st.session_state.lista_perguntas)
     pontos = st.session_state.pontos
-    st.subheader(f"Sua pontuação final: {pontos} de {total} acertos.")
+
+    st.info(f"Você acertou **{pontos} de {total}** questões!")
 
     if pontos == total:
-        st.success("Excelente! Você gabaritou e dominou todo o conteúdo!")
+        st.success("Nota 10! Você gabaritou tudo!")
     elif pontos >= total / 2:
-        st.info("Muito bem! Continue estudando para acertar todas.")
+        st.success("Muito bom resultado! Continue praticando.")
     else:
-        st.warning("Bom esforço! Leia as explicações com atenção e tente novamente.")
+        st.warning("Bom treino! Vale a pena refazer para fixar bem a matéria.")
 
-    if st.button("Jogar Novamente", type="primary"):
-        reiniciar_jogo()
+    st.write("")
+    if st.button("Refazer / Mudar de assunto", type="primary"):
+        resetar()
         st.rerun()
 
-# Tela 3: Pergunta Ativa
+# Tela 3: Pergunta Atual
 else:
-    q_idx = st.session_state.pergunta_atual_idx
-    pergunta_data = st.session_state.perguntas_sorteadas[q_idx]
+    idx = st.session_state.pergunta_atual
+    dados = st.session_state.lista_perguntas[idx]
+
+    # Barra de progresso
+    progresso = idx / len(st.session_state.lista_perguntas)
+    st.progress(progresso)
 
     st.caption(
-        f"Matéria: {st.session_state.tema_escolhido} | Pergunta {q_idx + 1} de"
-        f" {len(st.session_state.perguntas_sorteadas)}"
+        f"Matéria: **{st.session_state.tema}** | Questão {idx + 1} de"
+        f" {len(st.session_state.lista_perguntas)}"
     )
-    st.progress((q_idx) / len(st.session_state.perguntas_sorteadas))
 
-    st.subheader(pergunta_data["pergunta"])
+    st.markdown(f"### {dados['pergunta']}")
 
-    # Opções com seleção
-    opcao_selecionada = st.radio(
-        "Marque a opção que você acha correta:",
-        pergunta_data["opcoes"],
+    escolha = st.radio(
+        "Escolha a resposta correta:",
+        dados["opcoes"],
         disabled=st.session_state.respondido,
-        key=f"q_{q_idx}",
+        key=f"p_{idx}",
     )
+
+    st.write("")
 
     if not st.session_state.respondido:
-        if st.button("Confirmar Resposta", type="primary"):
+        if st.button("Conferir Resposta", type="primary"):
             st.session_state.respondido = True
-            if opcao_selecionada == pergunta_data["correta"]:
+            if escolha == dados["correta"]:
                 st.session_state.pontos += 1
-                st.session_state.resposta_correta_flag = True
+                st.session_state.acertou = True
             else:
-                st.session_state.resposta_correta_flag = False
+                st.session_state.acertou = False
             st.rerun()
     else:
-        # Feedback após confirmar a resposta
-        if st.session_state.resposta_correta_flag:
-            st.success("✅ Resposta Correta!")
+        if st.session_state.acertou:
+            st.success("✨ Acertou em cheio!")
         else:
-            st.error("❌ Resposta Incorreta!")
-            st.info(f"👉 **A resposta correta era:** {pergunta_data['correta']}")
+            st.error("Ops, resposta errada!")
+            st.info(f"💡 **A alternativa certa era:** {dados['correta']}")
 
-        # Explicação detalhada do conteúdo
-        st.markdown(f"**📚 Explicação:** {pergunta_data['explicacao']}")
+        st.markdown(f"**Entenda o porquê:** {dados['explicacao']}")
 
-        # Botão para avançar
-        if st.button("Próxima Pergunta ➡️", type="primary"):
-            st.session_state.pergunta_atual_idx += 1
+        st.write("")
+        if st.button("Próxima Questão ➔", type="primary"):
+            st.session_state.pergunta_atual += 1
             st.session_state.respondido = False
             st.rerun()
