@@ -8,11 +8,19 @@ st.set_page_config(
     layout="centered",
 )
 
+# Lista com os caminhos dos memes
+MEMES_VITORIA = [
+    "memes/download (2).jpg",
+    "memes/download (1).jpg",
+    "memes/EITA BIXO SABIDO.jpg",
+    "memes/download.jpg",
+]
+
 # Estilização visual com ilustrações sutis de fundo e alto contraste
 st.markdown(
     """
     <style>
-    /* Fundo escuro enriquecido com desenhos e padrões educativos sutis */
+    /* Fundo escuro com padrão sutil */
     .stApp {
         background-color: #0f172a;
         background-image: 
@@ -385,6 +393,12 @@ elif st.session_state.pergunta_atual >= len(st.session_state.lista_perguntas):
 
     if pontos == total:
         st.success("Excelente! Você gabaritou tudo!")
+        # Escolhe um meme aleatório da lista e exibe
+        meme_sorteado = random.choice(MEMES_VITORIA)
+        try:
+            st.image(meme_sorteado, use_column_width=True)
+        except Exception:
+            pass
     elif pontos >= total / 2:
         st.success("Muito bem! Bom resultado!")
     else:
