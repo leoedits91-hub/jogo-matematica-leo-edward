@@ -1,4 +1,3 @@
-import base64
 import os
 import random
 import streamlit as st
@@ -10,34 +9,38 @@ st.set_page_config(
     layout="centered",
 )
 
-# Lista com os novos nomes simplificados
-MEMES_VITORIA = [
-    "memes/meme1.jpg",
-    "memes/meme2.jpg",
-    "memes/meme3.jpg",
-    "memes/meme4.jpg",
-]
 
+def exibir_imagem_aleatoria():
+    """Busca automaticamente qualquer imagem válida dentro da pasta memes/ e exibe."""
+    pasta_memes = "memes"
 
-def exibir_imagem_garantida(caminho_imagem):
-    """Lê a imagem local e força a exibição via HTML/Base64 para evitar falhas do servidor."""
-    if os.path.exists(caminho_imagem):
-        with open(caminho_imagem, "rb") as image_file:
-            encoded_string = base64.b64encode(image_file.read()).decode()
-        extensao = caminho_imagem.split(".")[-1].lower()
-        mime_type = "image/png" if extensao == "png" else "image/jpeg"
+    if not os.path.exists(pasta_memes):
+        st.error("❌ A pasta `memes/` não existe no seu repositório GitHub.")
+        return
 
-        html_code = f"""
-        <div style="display: flex; justify-content: center; align-items: center; margin-top: 15px; margin-bottom: 15px;">
-            <img src="data:{mime_type};base64,{encoded_string}" style="max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0px 4px 12px rgba(0,0,0,0.3);" />
-        </div>
-        """
-        st.markdown(html_code, unsafe_allow_html=True)
-    else:
+    extensoes_validas = (".jpg", ".jpeg", ".png", ".gif", ".webp")
+    imagens = [
+        f
+        for f in os.listdir(pasta_memes)
+        if f.lower().endswith(extensoes_validas)
+    ]
+
+    # Filtra arquivos que não estejam vazios (0 bytes)
+    imagens_validas = []
+    for img in imagens:
+        caminho = os.path.join(pasta_memes, img)
+        if os.path.getsize(caminho) > 0:
+            imagens_validas.append(caminho)
+
+    if not imagens_validas:
         st.error(
-            f"❌ O arquivo `{caminho_imagem}` não foi encontrado dentro da"
-            " pasta `memes/` no GitHub. Verifique os nomes dos arquivos!"
+            "❌ Nenhuma imagem válida (com arquivo de foto) foi encontrada na"
+            " pasta `memes/`!"
         )
+        return
+
+    imagem_sorteada = random.choice(imagens_validas)
+    st.image(imagem_sorteada, use_container_width=True)
 
 
 # Estilização visual
@@ -410,12 +413,10 @@ elif st.session_state.pergunta_atual >= len(st.session_state.lista_perguntas):
 
     st.info(f"Sua pontuação final: **{pontos} de {total} acertos**")
 
-    # REGRA: Acertou 5 de 5 -> Exibe imagem obrigatoriamente
+    # Exibe a imagem apenas ao acertar 5 de 5
     if pontos == total:
         st.success("Excelente! Você gabaritou tudo!")
-
-        meme_sorteado = random.choice(MEMES_VITORIA)
-        exibir_imagem_garantida(meme_sorteado)
+        exibir_imagem_aleatoria()
 
     elif pontos >= total / 2:
         st.success("Muito bem! Bom resultado!")
