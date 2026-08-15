@@ -1,3 +1,5 @@
+import base64
+import os
 import random
 import streamlit as st
 
@@ -8,19 +10,40 @@ st.set_page_config(
     layout="centered",
 )
 
-# Lista com os caminhos dos memes
+# Lista com os novos nomes simplificados
 MEMES_VITORIA = [
-    "memes/download (2).jpg",
-    "memes/download (1).jpg",
-    "memes/EITA BIXO SABIDO.jpg",
-    "memes/download.jpg",
+    "memes/meme1.jpg",
+    "memes/meme2.jpg",
+    "memes/meme3.jpg",
+    "memes/meme4.jpg",
 ]
 
-# Estilização visual com ilustrações sutis de fundo e alto contraste
+
+def exibir_imagem_garantida(caminho_imagem):
+    """Lê a imagem local e força a exibição via HTML/Base64 para evitar falhas do servidor."""
+    if os.path.exists(caminho_imagem):
+        with open(caminho_imagem, "rb") as image_file:
+            encoded_string = base64.b64encode(image_file.read()).decode()
+        extensao = caminho_imagem.split(".")[-1].lower()
+        mime_type = "image/png" if extensao == "png" else "image/jpeg"
+
+        html_code = f"""
+        <div style="display: flex; justify-content: center; align-items: center; margin-top: 15px; margin-bottom: 15px;">
+            <img src="data:{mime_type};base64,{encoded_string}" style="max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0px 4px 12px rgba(0,0,0,0.3);" />
+        </div>
+        """
+        st.markdown(html_code, unsafe_allow_html=True)
+    else:
+        st.error(
+            f"❌ O arquivo `{caminho_imagem}` não foi encontrado dentro da"
+            " pasta `memes/` no GitHub. Verifique os nomes dos arquivos!"
+        )
+
+
+# Estilização visual
 st.markdown(
     """
     <style>
-    /* Fundo escuro com padrão sutil */
     .stApp {
         background-color: #0f172a;
         background-image: 
@@ -30,7 +53,6 @@ st.markdown(
         color: #F8FAFC;
     }
     
-    /* Cartão centralizado para destacar o conteúdo e proteger a leitura */
     div.block-container {
         background: rgba(15, 23, 42, 0.85);
         backdrop-filter: blur(8px);
@@ -40,18 +62,15 @@ st.markdown(
         box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
     }
 
-    /* Cores legíveis dos títulos e textos */
     h1, h2, h3, h4, label, .stMarkdown {
         color: #FFFFFF !important;
     }
 
-    /* Estilo claro para as opções de resposta */
     div[data-testid="stRadio"] > label {
         color: #F8FAFC !important;
         font-size: 1.1rem !important;
     }
 
-    /* Botões estilizados com destaque visual */
     div.stButton > button:first-child {
         background-color: #2563EB !important;
         color: #FFFFFF !important;
@@ -391,14 +410,13 @@ elif st.session_state.pergunta_atual >= len(st.session_state.lista_perguntas):
 
     st.info(f"Sua pontuação final: **{pontos} de {total} acertos**")
 
+    # REGRA: Acertou 5 de 5 -> Exibe imagem obrigatoriamente
     if pontos == total:
         st.success("Excelente! Você gabaritou tudo!")
-        # Escolhe um meme aleatório da lista e exibe
+
         meme_sorteado = random.choice(MEMES_VITORIA)
-        try:
-            st.image(meme_sorteado, use_column_width=True)
-        except Exception:
-            pass
+        exibir_imagem_garantida(meme_sorteado)
+
     elif pontos >= total / 2:
         st.success("Muito bem! Bom resultado!")
     else:
