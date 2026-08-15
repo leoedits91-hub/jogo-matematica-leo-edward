@@ -1,30 +1,54 @@
 import random
 import streamlit as st
 
-# Configuração inicial da página
+# Configuração da página
 st.set_page_config(
-    page_title="Desafio de Estudos - 3º Ano",
+    page_title="Cantinho dos Estudos - 3º Ano",
     page_icon="✏️",
     layout="centered",
 )
 
-# Estilização visual para deixar o app mais bonito e moderno
+# Estilização visual com alto contraste para facilitar a leitura
 st.markdown(
     """
     <style>
+    /* Fundo escuro e texto claro para leitura confortável */
     .stApp {
-        background-color: #f8f9fa;
+        background-color: #121826;
+        color: #F3F4F6;
     }
+    
+    /* Estilização dos títulos e textos principais */
+    h1, h2, h3, h4, label, .stMarkdown {
+        color: #FFFFFF !important;
+    }
+    
+    /* Destaque para as caixas de perguntas */
+    div[data-testid="stRadio"] > label {
+        color: #F3F4F6 !important;
+        font-size: 1.1rem !important;
+    }
+    
+    /* Customização dos botões principais */
     div.stButton > button:first-child {
-        border-radius: 8px;
-        font-weight: bold;
+        background-color: #2563EB !important;
+        color: #FFFFFF !important;
+        border: none !important;
+        border-radius: 10px !important;
+        padding: 0.6rem 1.2rem !important;
+        font-weight: bold !important;
+        font-size: 1rem !important;
+    }
+    div.stButton > button:first-child:hover {
+        background-color: #1D4ED8 !important;
+        color: #FFFFFF !important;
     }
     </style>
 """,
     unsafe_allow_html=True,
 )
 
-# Banco de perguntas com linguagem natural
+# Banco de perguntas com linguagem direta
 BANCO_PERGUNTAS = {
     "🏃‍♂️ Educação Física - Danças e Ritmos": [
         {
@@ -286,7 +310,7 @@ BANCO_PERGUNTAS = {
 
 TOTAL_PERGUNTAS = 5
 
-# Controle do jogo
+# Estado do aplicativo
 if "pontos" not in st.session_state:
     st.session_state.pontos = 0
 if "pergunta_atual" not in st.session_state:
@@ -310,26 +334,24 @@ def resetar():
     st.session_state.acertou = False
 
 
-# Título principal
+# Cabeçalho do Quiz
 st.title("📝 Cantinho dos Estudos")
-st.write("Escolha a matéria, teste seus conhecimentos e aprenda com os erros!")
+st.write("Escolha a matéria, teste seus conhecimentos e aprenda praticando!")
 
 st.divider()
 
-# Tela 1: Escolha da Matéria
+# Tela 1: Escolha do Assunto
 if st.session_state.tema is None:
-    st.subheader("O que vamos praticar hoje?")
-    opcao = st.radio("Selecione a disciplina:", list(BANCO_PERGUNTAS.keys()))
+    st.subheader("Selecione uma matéria:")
+    opcao = st.radio("", list(BANCO_PERGUNTAS.keys()))
 
     st.write("")
     if st.button("Começar Exercícios 🚀", type="primary"):
         st.session_state.tema = opcao
 
-        # Prepara e embaralha as perguntas
         perguntas = [dict(p) for p in BANCO_PERGUNTAS[opcao]]
         random.shuffle(perguntas)
 
-        # Embaralha as alternativas de cada pergunta
         for p in perguntas:
             random.shuffle(p["opcoes"])
 
@@ -339,31 +361,30 @@ if st.session_state.tema is None:
 # Tela 2: Finalização
 elif st.session_state.pergunta_atual >= len(st.session_state.lista_perguntas):
     st.balloons()
-    st.subheader("🎉 Mandou bem!")
+    st.subheader("🎉 Quiz Concluído!")
 
     total = len(st.session_state.lista_perguntas)
     pontos = st.session_state.pontos
 
-    st.info(f"Você acertou **{pontos} de {total}** questões!")
+    st.info(f"Sua pontuação final: **{pontos} de {total} acertos**")
 
     if pontos == total:
-        st.success("Nota 10! Você gabaritou tudo!")
+        st.success("Excelente! Você gabaritou tudo!")
     elif pontos >= total / 2:
-        st.success("Muito bom resultado! Continue praticando.")
+        st.success("Muito bem! Bom resultado!")
     else:
-        st.warning("Bom treino! Vale a pena refazer para fixar bem a matéria.")
+        st.warning("Bom esforço! Vale a pena tentar de novo para treinar.")
 
     st.write("")
-    if st.button("Refazer / Mudar de assunto", type="primary"):
+    if st.button("Jogar Novamente 🔄", type="primary"):
         resetar()
         st.rerun()
 
-# Tela 3: Pergunta Atual
+# Tela 3: Questão em Exibição
 else:
     idx = st.session_state.pergunta_atual
     dados = st.session_state.lista_perguntas[idx]
 
-    # Barra de progresso
     progresso = idx / len(st.session_state.lista_perguntas)
     st.progress(progresso)
 
@@ -375,7 +396,7 @@ else:
     st.markdown(f"### {dados['pergunta']}")
 
     escolha = st.radio(
-        "Escolha a resposta correta:",
+        "Marque a alternativa correta:",
         dados["opcoes"],
         disabled=st.session_state.respondido,
         key=f"p_{idx}",
@@ -397,9 +418,9 @@ else:
             st.success("✨ Acertou em cheio!")
         else:
             st.error("Ops, resposta errada!")
-            st.info(f"💡 **A alternativa certa era:** {dados['correta']}")
+            st.info(f"💡 **A alternativa correta era:** {dados['correta']}")
 
-        st.markdown(f"**Entenda o porquê:** {dados['explicacao']}")
+        st.markdown(f"**Explicação:** {dados['explicacao']}")
 
         st.write("")
         if st.button("Próxima Questão ➔", type="primary"):
