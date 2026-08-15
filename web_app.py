@@ -8,28 +8,42 @@ st.set_page_config(
     layout="centered",
 )
 
-# Estilização visual com alto contraste para facilitar a leitura
+# Estilização visual com ilustrações sutis de fundo e alto contraste
 st.markdown(
     """
     <style>
-    /* Fundo escuro e texto claro para leitura confortável */
+    /* Fundo escuro enriquecido com desenhos e padrões educativos sutis */
     .stApp {
-        background-color: #121826;
-        color: #F3F4F6;
+        background-color: #0f172a;
+        background-image: 
+            radial-gradient(#334155 1.5px, transparent 1.5px), 
+            url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%231e293b' fill-opacity='0.4'%3E%3Cpath d='M0 0h40v40H0V0zm40 40h40v40H40V40z'/%3E%3Ccircle cx='20' cy='20' r='6' stroke='%23334155' stroke-width='1.5' fill='none'/%3E%3Cpath d='M60 15 l10 10 M70 15 l-10 10' stroke='%23334155' stroke-width='1.5'/%3E%3C/g%3E%3C/svg%3E");
+        background-size: 30px 30px, 120px 120px;
+        color: #F8FAFC;
     }
     
-    /* Estilização dos títulos e textos principais */
+    /* Cartão centralizado para destacar o conteúdo e proteger a leitura */
+    div.block-container {
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(8px);
+        padding: 2rem;
+        border-radius: 16px;
+        border: 1px solid #1e293b;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Cores legíveis dos títulos e textos */
     h1, h2, h3, h4, label, .stMarkdown {
         color: #FFFFFF !important;
     }
-    
-    /* Destaque para as caixas de perguntas */
+
+    /* Estilo claro para as opções de resposta */
     div[data-testid="stRadio"] > label {
-        color: #F3F4F6 !important;
+        color: #F8FAFC !important;
         font-size: 1.1rem !important;
     }
-    
-    /* Customização dos botões principais */
+
+    /* Botões estilizados com destaque visual */
     div.stButton > button:first-child {
         background-color: #2563EB !important;
         color: #FFFFFF !important;
@@ -38,17 +52,18 @@ st.markdown(
         padding: 0.6rem 1.2rem !important;
         font-weight: bold !important;
         font-size: 1rem !important;
+        transition: all 0.2s ease;
     }
     div.stButton > button:first-child:hover {
         background-color: #1D4ED8 !important;
-        color: #FFFFFF !important;
+        transform: translateY(-2px);
     }
     </style>
 """,
     unsafe_allow_html=True,
 )
 
-# Banco de perguntas com linguagem direta
+# Banco de perguntas
 BANCO_PERGUNTAS = {
     "🏃‍♂️ Educação Física - Danças e Ritmos": [
         {
@@ -310,7 +325,7 @@ BANCO_PERGUNTAS = {
 
 TOTAL_PERGUNTAS = 5
 
-# Estado do aplicativo
+# Controle de estado
 if "pontos" not in st.session_state:
     st.session_state.pontos = 0
 if "pergunta_atual" not in st.session_state:
